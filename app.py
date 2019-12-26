@@ -36,6 +36,12 @@ class Pessoa(Resource):
         }
         return response
 
+    def delete(self, nome):
+        pessoa = Pessoas.query.filter_by(nome=nome).first()
+        message = 'Pessoa {} excluida com sucesso'.format(pessoa.nome)
+        pessoa.delete()
+        return {'status': 'success', 'message':message}
+
 api.add_resource(Pessoa, '/pessoa/<string:nome>/')
 
 if __name__ == '__main__':
