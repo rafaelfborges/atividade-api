@@ -1,6 +1,6 @@
 from flask import Flask, request, json
 from flask_restful import Resource, Api
-from models import Pessoas
+from models import Pessoas, Atividades
 
 app = Flask(__name__)
 api = Api(app)
@@ -59,8 +59,27 @@ class ListaPessoas(Resource):
         }
         return response
 
+class ListaAtividades(Resource):
+    def get(self):
+        atividades = Atividades.query.all()
+        response = [{'id': i.id, 'nome': i.nome, 'pessoa': i.pessoa.nome} for i in atividades]
+        return response
+
+    def post(self):
+        dados = json.loads(request.data)
+        pessoa = Pessoas.query.filter_by(nome=dados['pessoa']).first()
+        atividade = Atividades(nome=dados['nome'], pessoa=pessoa)
+        atividade.save()
+        response = {
+            'pessoa': atividade.pessoa.nome,
+            'nome': atividade.nome,
+            'id': atividade.id
+        }
+        return response
+
 api.add_resource(Pessoa, '/pessoa/<string:nome>/')
 api.add_resource(ListaPessoas, '/pessoa/')
+api.add_resource(ListaAtividades, '/atividades/')
 
 if __name__ == '__main__':
     app.run(debug=True)
