@@ -42,7 +42,25 @@ class Pessoa(Resource):
         pessoa.delete()
         return {'status': 'success', 'message':message}
 
+class ListaPessoas(Resource):
+    def get(self):
+        pessoas = Pessoas.query.all()
+        response = [{'id':i.id, 'nome': i.nome, 'idade': i.idade} for i in pessoas]
+        return response
+
+    def post(self):
+        dados = json.loads(request.data)
+        pessoa = Pessoas(nome=dados['nome'], idade=dados['idade'])
+        pessoa.save()
+        response = {
+            'id': pessoa.id,
+            'nome': pessoa.nome,
+            'idade': pessoa.idade
+        }
+        return response
+
 api.add_resource(Pessoa, '/pessoa/<string:nome>/')
+api.add_resource(ListaPessoas, '/pessoa/')
 
 if __name__ == '__main__':
     app.run(debug=True)
