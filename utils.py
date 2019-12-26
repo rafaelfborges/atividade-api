@@ -33,10 +33,10 @@ def consulta_todos_usuarios():
     print(usuarios)
 
 if __name__ == '__main__':
-    #insere_usuario('rafael', '1234')
-    #insere_usuario('galleani', '4321')
-    #consulta_todos_usuarios()
-    insere_pessoas()
+    insere_usuario('rafael', '1234')
+    insere_usuario('borges', '4321')
+    consulta_todos_usuarios()
+    #insere_pessoas()
     #altera_pessoa()
     #exclui_pessoa()
-    consulta_pessoas()
+    #consulta_pessoas()
