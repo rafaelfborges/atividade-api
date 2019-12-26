@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, json
 from flask_restful import Resource, Api
 from models import Pessoas
 
@@ -19,6 +19,21 @@ class Pessoa(Resource):
                 'status': 'error',
                 'message': 'Pessoa nao encontrada'
             }
+        return response
+
+    def put(self, nome):
+        pessoa = Pessoas.query.filter_by(nome=nome).first()
+        dados = json.loads(request.data)
+        if 'nome' in dados:
+            pessoa.nome = dados['nome']
+        if 'idade' in dados:
+            pessoa.idade = dados['idade']
+        pessoa.save()
+        response = {
+            'id': pessoa.id,
+            'nome': pessoa.nome,
+            'idade': pessoa.idade
+        }
         return response
 
 api.add_resource(Pessoa, '/pessoa/<string:nome>/')
